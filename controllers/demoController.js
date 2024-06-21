@@ -4,10 +4,7 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Demo = require('../models/demoModel');
-const Task = require('../models/taskModel');
-const Activity = require('../models/activityModel');
 const User = require('../models/userModel');
-const ApiQuery = require('../middlewares/apiquery');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
 const factory = require('./handlerFactory');
@@ -30,7 +27,7 @@ const upload = multer({
 });
 
 exports.uploadImage = upload.single('imageCover');
-exports.uploadGallery = upload.fields([{ name: 'images', maxCount: 6 }]);
+exports.uploadGallery = upload.fields([{ name: 'images', maxCount: 20 }]);
 
 exports.resizeImage = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
@@ -89,7 +86,8 @@ exports.getDemos = catchAsync(async (req, res, next) => {
         $match: filterData,
       },
       {
-        $sort: { createdAt: -1 },
+       // $sort: { createdAt: -1 },
+        $sort: { order: 1 },
       },
       {
         $skip: skip,
@@ -333,13 +331,16 @@ exports.updatePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.updateGallery = catchAsync(async (req, res, next) => {
-  const doc = await Demo.updateOne({ _id: req.params.id }, { $push: { images: { $each: req.body.images } } });
+  const type = req.body.type; 
+  const field = type === 'backend' ? 'gallery_backend' : 'gallery_frontend';
+
+  const update = { $push: { [field]: { $each: req.body.images } } };
+  const doc = await Demo.updateOne({ _id: req.params.id }, update);
 
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  //res.redirect('/demo/photo/' + req.params.id);
   res.status(200).json({
     title: 'Update gallery',
     create: 'success',
@@ -407,6 +408,17 @@ exports.updatePhoto = catchAsync(async (req, res, next) => {
 exports.cover = catchAsync(async (req, res, next) => {
   const filename = req.params.filename;
   const filePath = path.join(process.env.FILE_PATH, 'uploads/demo', filename);
+  res.sendFile(filePath, (err) => {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+  });
+});
+
+exports.gallery = catchAsync(async (req, res, next) => {
+  const filename = req.params.filename;
+  const filePath = path.join(process.env.FILE_PATH, 'public/img/demo', filename);
   res.sendFile(filePath, (err) => {
     if (err) {
       console.log(err);

@@ -24,12 +24,6 @@ router
   .get(demoMode, authController.protect, demoController.editDemo)
   .post(demoMode, authController.protect, demoController.updateDemo);
 
-router.route('/demo/members/:id').get(demoMode, authController.protect, demoController.membersDemo);
-
-router.route('/add/member/demo/').post(demoMode, authController.protect, demoController.AddMemberDemo);
-
-router.route('/remove/member/demo/').post(demoMode, authController.protect, demoController.RemoveMemberDemo);
-
 router
   .route('/demo/photo/:id')
   .post(
@@ -50,20 +44,14 @@ router
     demoController.updateGallery
   );
 
-router
-  .route('/demo/delete/:id')
-  .post(demoMode, authController.protect, demoController.deleteDemo);
+router.route('/demo/delete/:id').post(demoMode, authController.protect, demoController.deleteDemo);
 
-router
-  .route('/gallery/delete')
-  .post(demoMode, authController.protect, demoController.deleteGallery);
+router.route('/gallery/delete').post(demoMode, authController.protect, demoController.deleteGallery);
 
-router
-  .route('/active/demo/:id')
-  .post(demoMode, authController.protect, demoController.activeDemo);
+router.route('/active/demo/:id').post(demoMode, authController.protect, demoController.activeDemo);
 
-router
-  .route('/demo/cover/:filename')
-  .get(demoController.cover);
+router.route('/demo/cover/:filename').get(demoController.cover);
+
+router.route('/demo/gallery/:filename').get(demoController.gallery);
 
 module.exports = router;

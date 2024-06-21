@@ -63,19 +63,7 @@ app.use(
     saveUninitialized: true,
   })
 );
-/*
-app.use(
-  session({
-    name: 'user_sid',
-    secret: 'secretkey',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      expires: 1200000,
-    },
-  })
-);
-*/
+
 app.use(flash());
 app.use(
   i18n({
@@ -91,17 +79,13 @@ const authRouter = require('./routers/authRoutes');
 const dashboardRouter = require('./routers/dashboardRoutes');
 const demoRouter = require('./routers/demoRoutes');
 const userRouter = require('./routers/userRoutes');
-const commentRouter = require('./routers/commentRoutes');
 const fileRouter = require('./routers/fileRoutes');
-const galleryRouter = require('./routers/galleryRoutes');
 
 app.use('/api/', authRouter);
 app.use('/api/', dashboardRouter);
 app.use('/api/', demoRouter);
 app.use('/api/', userRouter);
-app.use('/api/', commentRouter);
 app.use('/api/', fileRouter);
-app.use('/api/', galleryRouter);
 
 http.listen(8000, function () {
   console.log('listening on *:8000');

@@ -3,7 +3,6 @@ const multer = require('multer');
 const multerStorage = multer.memoryStorage();
 const moment = require('moment');
 const sharp = require('sharp');
-const Task = require('../models/taskModel');
 const File = require('../models/fileModel');
 const Demo = require('../models/demoModel');
 const factory = require('./handlerFactory');
