@@ -96,7 +96,12 @@ exports.login = catchAsync(async (req, res, next) => {
     errorLogin(res);
   }
 
+  console.log(password);
+  console.log(user.password);
+
   const correct = await user.correctPassword(password, user.password);
+
+console.log(correct);
 
   if (!correct) {
     errorLogin(res);

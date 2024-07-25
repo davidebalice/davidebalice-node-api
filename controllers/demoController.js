@@ -68,13 +68,7 @@ exports.getDemos = catchAsync(async (req, res, next) => {
     const regex = new RegExp(req.query.key, 'i');
     filterData.name = { $regex: regex };
   }
-  /*
-  if (userRole === 'admin') {
-    filterData.$or = [{ owner: userId }];
-  } else {
-    filterData.$or = [{ owner: userId }, { 'members.user': userId }];
-  }
-*/
+
   const setLimit = 12;
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
@@ -86,7 +80,7 @@ exports.getDemos = catchAsync(async (req, res, next) => {
         $match: filterData,
       },
       {
-       // $sort: { createdAt: -1 },
+        // $sort: { createdAt: -1 },
         $sort: { order: 1 },
       },
       {
@@ -95,32 +89,6 @@ exports.getDemos = catchAsync(async (req, res, next) => {
       {
         $limit: limit,
       },
-
-      /*
-      {
-        $unwind: {
-          path: '$latestActivity',
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      {
-        $addFields: {
-          numTasks: { $size: '$tasks' },
-          numMembers: { $size: '$members' },
-        },
-      },
-
-      {
-        $demo: {
-          _id: 1,
-          name: 1,
-          createdAt: 1,
-          imageCover: 1,
-          
-          lastUpdate: { $ifNull: ['$latestActivity.lastUpdate', new Date(0)] },
-        },
-      },
-      */
     ],
     {
       debug: true,
@@ -215,10 +183,6 @@ exports.getDemo = catchAsync(async (req, res, next) => {
 
   const tasks = await Task.find({ demo_id: req.params.id }).sort({ createdAt: 1 });
 
-  //console.log(tasks);
-
-  console.log(demo);
-
   res.status(200).json({
     title: 'Demo',
     demo,
@@ -239,6 +203,9 @@ exports.editDemo = catchAsync(async (req, res, next) => {
 });
 
 exports.updateDemo = catchAsync(async (req, res, next) => {
+  console.log('global.demo controller');
+  console.log(global.demo);
+
   if (global.demo) {
     res.status(200).json({
       title: 'Demo mode',
@@ -331,7 +298,7 @@ exports.updatePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.updateGallery = catchAsync(async (req, res, next) => {
-  const type = req.body.type; 
+  const type = req.body.type;
   const field = type === 'backend' ? 'gallery_backend' : 'gallery_frontend';
 
   const update = { $push: { [field]: { $each: req.body.images } } };

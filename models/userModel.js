@@ -43,13 +43,6 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Enter password confirmation'],
     trim: true,
     minlength: ['8', 'min 8 characters'],
-    /*
-    validate: {
-      validator: function (passwordConfirmation) {
-        return passwordConfirmation === this.get('password');
-      },
-      message: 'Passwords do not match',
-    },*/
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
@@ -67,11 +60,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     select: false,
   },
+  demo: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 12);
+  this.password = await bcrypt.hash(this.password, 10);
 
   this.passwordConfirm = undefined;
   next();
@@ -88,10 +85,7 @@ userSchema.pre(/^find/, function (next) {
   next();
 });
 
-userSchema.methods.correctPassword = async function (
-  candidatePassword,
-  userPassword
-) {
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
@@ -106,10 +100,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
 
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex');
-  this.passwordResetToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
+  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
 
   return resetToken;

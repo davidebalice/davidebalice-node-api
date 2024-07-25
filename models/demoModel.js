@@ -129,37 +129,7 @@ const demoSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
-/*
-projectSchema.virtual('tasks', {
-  ref: 'Task',
-  foreignField: 'project_id',
-  localField: '_id',
-});
 
-projectSchema.pre('find', function (next) {
-  this.populate('members.user');
-  next();
-});
-
-projectSchema.pre('find', function (next) {
-  this.populate('members', 'name surname email role photo');
-  next();
-});
-
-projectSchema.pre('findOne', function (next) {
-  this.populate('members', 'name surname email role photo');
-  next();
-});
-
-projectSchema.pre('find', function (next) {
-  this.populate('client', 'companyName email');
-  next();
-});
-
-projectSchema.post('save', (doc, next) => {
-  next();
-});
-*/
 const Demo = mongoose.model('Demo', demoSchema);
 
 module.exports = Demo;

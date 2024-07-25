@@ -15,20 +15,20 @@ router.route('/demos').get(authController.protect, demoController.getDemos);
 router
   .route('/add/demo')
   .get(authController.protect, demoController.addDemo)
-  .post(demoMode, authController.protect, demoController.createDemo);
+  .post(authController.protect, demoMode, demoController.createDemo);
 
-router.route('/demo/:id').get(demoMode, authController.protect, demoController.getDemo);
+router.route('/demo/:id').get(authController.protect, demoMode, demoController.getDemo);
 
 router
   .route('/edit/demo/:id')
-  .get(demoMode, authController.protect, demoController.editDemo)
-  .post(demoMode, authController.protect, demoController.updateDemo);
+  .get(authController.protect, demoController.editDemo)
+  .post(authController.protect, demoMode, demoController.updateDemo);
 
 router
   .route('/demo/photo/:id')
   .post(
-    demoMode,
     authController.protect,
+    demoMode,
     demoController.uploadImage,
     demoController.resizeImage,
     demoController.updatePhoto
@@ -37,18 +37,18 @@ router
 router
   .route('/demo/gallery/:id')
   .post(
-    demoMode,
     authController.protect,
+    demoMode,
     demoController.uploadGallery,
     demoController.resizeGallery,
     demoController.updateGallery
   );
 
-router.route('/demo/delete/:id').post(demoMode, authController.protect, demoController.deleteDemo);
+router.route('/demo/delete/:id').post(authController.protect, demoMode, demoController.deleteDemo);
 
-router.route('/gallery/delete').post(demoMode, authController.protect, demoController.deleteGallery);
+router.route('/gallery/delete').post(authController.protect, demoMode, demoController.deleteGallery);
 
-router.route('/active/demo/:id').post(demoMode, authController.protect, demoController.activeDemo);
+router.route('/active/demo/:id').post(authController.protect, demoMode, demoController.activeDemo);
 
 router.route('/demo/cover/:filename').get(demoController.cover);
 

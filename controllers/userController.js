@@ -215,9 +215,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   try {
     const { password, passwordConfirm } = req.body;
 
-    console.log(password);
-    console.log(passwordConfirm);
-
     if (password !== passwordConfirm) {
       return res.status(200).json({ status: 'error', message: 'Password not match' });
     } else {
