@@ -4,6 +4,7 @@ const moment = require('moment');
 const mongoose = require('mongoose');
 const sharp = require('sharp');
 const Demo = require('../models/demoModel');
+const Gallery = require('../models/galleryModel');
 const User = require('../models/userModel');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
@@ -69,6 +70,11 @@ exports.getDemos = catchAsync(async (req, res, next) => {
     filterData.name = { $regex: regex };
   }
 
+  if (req.query.tecnology && req.query.tecnology !== null && req.query.tecnology !== '') {
+    const tecnologyRegex = new RegExp(`\\b${req.query.tecnology}\\b`, 'i');
+    filterData.tecnology = { $regex: tecnologyRegex };
+  }
+
   const setLimit = 12;
   const limit = req.query.limit * 1 || setLimit;
   const page = req.query.page * 1 || 1;
@@ -123,6 +129,27 @@ exports.getDemos = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getTecnologies = catchAsync(async (req, res, next) => {
+  const demos = await Demo.find({}, 'tecnology');
+  const tecnologies = [];
+
+  demos.forEach((demo) => {
+    if (demo.tecnology) {
+      const techList = demo.tecnology.split(',').map((tech) => tech.trim());
+      tecnologies.push(...techList);
+    }
+  });
+
+  const uniqueTecnologies = [...new Set(tecnologies)];
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      tecnologies: uniqueTecnologies,
+    },
+  });
+});
+
 exports.addDemo = catchAsync(async (req, res, next) => {
   const clients = await Client.find({}).sort({ companyName: 1 });
   res.status(200).json({
@@ -155,6 +182,11 @@ exports.createDemo = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteDemo = catchAsync(async (req, res, next) => {
+  console.log(req.params.id);
+  console.log(req.params.id);
+  console.log(req.params.id);
+  console.log(req.params.id);
+  console.log(req.params.id);
   const doc = await Demo.findByIdAndDelete(req.params.id);
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -203,8 +235,7 @@ exports.editDemo = catchAsync(async (req, res, next) => {
 });
 
 exports.updateDemo = catchAsync(async (req, res, next) => {
-  console.log('global.demo controller');
-  console.log(global.demo);
+  //console.log(global.demo);
 
   if (global.demo) {
     res.status(200).json({
@@ -315,30 +346,21 @@ exports.updateGallery = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteGallery = catchAsync(async (req, res, next) => {
-  let query = await Demo.findById(req.body.id);
-  const image = req.body.image;
-  if (!image) {
-    return next(new AppError('No document found with that ID', 404));
+  const id = req.body.id;
+  const galleryImage = req.body.image;
+  await Gallery.deleteOne({ file: galleryImage });
+
+  console.log(id);
+  console.log(galleryImage);
+
+  await Demo.updateOne({ _id: id }, { $pull: { gallery_frontend: galleryImage, gallery_backend: galleryImage } });
+
+  try {
+    fs.unlinkSync(`./public/img/demo/${galleryImage}`);
+  } catch (err) {
+    console.error('Error:', err);
   }
 
-  const index = query.images.indexOf(image);
-  if (index > -1) {
-    query.images.splice(index, 1);
-  }
-
-  const doc = await Demo.updateOne({ _id: req.body.id }, { $set: { images: query.images } });
-
-  let pathFile = path.join(__dirname, '/public/img/demos', image);
-  pathFile = pathFile.replace('controllers', '');
-
-  if (fs.existsSync(pathFile)) {
-    fs.unlinkSync(pathFile);
-    console.log('File deleted:', image);
-  } else {
-    console.log('File not exists:', image);
-  }
-
-  //res.redirect('/demo/photo/' + req.body.id);
   res.status(200).json({
     title: 'Delete photo',
     create: 'success',

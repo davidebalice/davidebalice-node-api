@@ -11,6 +11,7 @@ router.route('/').get(authController.protect, async function (req, res) {
 });
 
 router.route('/demos').get(authController.protect, demoController.getDemos);
+router.route('/tecnologies').get(authController.protect, demoController.getTecnologies);
 
 router
   .route('/add/demo')
@@ -46,7 +47,7 @@ router
 
 router.route('/demo/delete/:id').post(authController.protect, demoMode, demoController.deleteDemo);
 
-router.route('/gallery/delete').post(authController.protect, demoMode, demoController.deleteGallery);
+router.route('/delete/gallery/').post(authController.protect, demoMode, demoController.deleteGallery);
 
 router.route('/active/demo/:id').post(authController.protect, demoMode, demoController.activeDemo);
 
