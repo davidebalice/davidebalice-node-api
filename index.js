@@ -11,13 +11,29 @@ const DB = process.env.DATABASE;
 const cors = require('cors');
 
 global.token = '';
-
+/*
 app.use(
   cors({
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200,
   })
 );
+*/
+
+const allowedOrigins = [/^https?:\/\/(?:.*\.)?davidebalice\.dev$/, /^http:\/\/localhost(:\d+)?$/];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.some((regex) => regex.test(origin))) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 mongoose
   .connect(DB, {

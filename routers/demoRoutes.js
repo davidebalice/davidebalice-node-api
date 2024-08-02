@@ -10,7 +10,7 @@ router.route('/').get(authController.protect, async function (req, res) {
   res.render('Dashboard/index', { users: users });
 });
 
-router.route('/demos').get(authController.protect, demoController.getDemos);
+router.route('/demos').get(demoController.getDemos);
 router.route('/tecnologies').get(authController.protect, demoController.getTecnologies);
 
 router
@@ -18,11 +18,11 @@ router
   .get(authController.protect, demoController.addDemo)
   .post(authController.protect, demoMode, demoController.createDemo);
 
-router.route('/demo/:id').get(authController.protect, demoMode, demoController.getDemo);
+router.route('/demo/:slug').get(demoController.getDemo);
 
 router
   .route('/edit/demo/:id')
-  .get(authController.protect, demoController.editDemo)
+  .get(demoController.editDemo)
   .post(authController.protect, demoMode, demoController.updateDemo);
 
 router

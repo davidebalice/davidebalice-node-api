@@ -8,7 +8,6 @@ const Gallery = require('../models/galleryModel');
 const User = require('../models/userModel');
 const AppError = require('../middlewares/error');
 const catchAsync = require('../middlewares/catchAsync');
-const factory = require('./handlerFactory');
 const fs = require('fs');
 const path = require('path');
 const { ObjectId } = require('mongodb');
@@ -60,9 +59,6 @@ exports.resizeGallery = catchAsync(async (req, res, next) => {
 });
 
 exports.getDemos = catchAsync(async (req, res, next) => {
-  const userId = res.locals.user._id;
-  const userRole = res.locals.user.role;
-
   let filterData = {};
 
   if (req.query.key) {
@@ -182,11 +178,6 @@ exports.createDemo = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteDemo = catchAsync(async (req, res, next) => {
-  console.log(req.params.id);
-  console.log(req.params.id);
-  console.log(req.params.id);
-  console.log(req.params.id);
-  console.log(req.params.id);
   const doc = await Demo.findByIdAndDelete(req.params.id);
   if (!doc) {
     return next(new AppError('No document found with that ID', 404));
@@ -198,27 +189,14 @@ exports.deleteDemo = catchAsync(async (req, res, next) => {
 });
 
 exports.getDemo = catchAsync(async (req, res, next) => {
-  const demo = await Demo.findById(req.params.id)
-    .populate('owner', 'name surname photo')
-    .populate('client', 'companyName');
-
-  const activity = await Activity.findOne({ demo_id: demo.id }).sort('-lastUpdate');
-
-  if (activity) {
-    const formattedLastUpdate = moment(activity.lastUpdate).format('DD/MM/YYYY HH:mm');
-    demo.lastUpdate = formattedLastUpdate;
-  }
+  const demo = await Demo.findOne({ slug: req.params.slug });
 
   if (!demo) {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  const tasks = await Task.find({ demo_id: req.params.id }).sort({ createdAt: 1 });
-
   res.status(200).json({
-    title: 'Demo',
     demo,
-    tasks,
   });
 });
 
