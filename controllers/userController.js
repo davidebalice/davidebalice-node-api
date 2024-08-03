@@ -62,7 +62,6 @@ exports.getUserByToken = catchAsync(async (req, res, next) => {
         '-passwordChangedAt -passwordResetExpires -createdAt -passwordResetToken -passwordConfirm'
       );
 
-      console.log(user);
       if (!user) {
         res.status(400).json({
           status: 'error',
@@ -270,8 +269,7 @@ exports.updatePhotoUser = catchAsync(async (req, res, next) => {
   if (req.file) {
     req.body.photo = req.file.filename;
   }
-  console.log('req.body.photo');
-  console.log(req.body.photo);
+
   const doc = await User.findByIdAndUpdate(req.params.id, req.body);
 
   if (!doc) {

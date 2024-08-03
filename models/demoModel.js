@@ -68,13 +68,10 @@ const demoSchema = new mongoose.Schema(
     subtitle: {
       type: String,
       trim: true,
-      maxlength: ['100', 'max 100 characters'],
-      minlength: ['4', 'min 4 characters'],
     },
     summary: {
       type: String,
       trim: true,
-      required: [true, 'Project must have a summary'],
     },
     description: {
       type: String,

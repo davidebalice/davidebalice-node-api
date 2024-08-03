@@ -6,12 +6,7 @@ const catchAsync = require('../middlewares/catchAsync');
 exports.dashboard = catchAsync(async (req, res, next) => {
   const demosCount = await Demo.countDocuments();
   const userCount = await User.countDocuments();
-  /*
-  const activities = await Activity.find()
-    .sort('-createdAt')
-    .limit(10)
-    .populate({ path: 'task_id', select: 'name _id', model: 'Task' });
-*/
+
   res.status(200).json({
     demos: demosCount,
     users: userCount,

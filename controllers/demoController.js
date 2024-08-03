@@ -328,9 +328,6 @@ exports.deleteGallery = catchAsync(async (req, res, next) => {
   const galleryImage = req.body.image;
   await Gallery.deleteOne({ file: galleryImage });
 
-  console.log(id);
-  console.log(galleryImage);
-
   await Demo.updateOne({ _id: id }, { $pull: { gallery_frontend: galleryImage, gallery_backend: galleryImage } });
 
   try {
