@@ -120,6 +120,10 @@ const demoSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    fullstack: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     toJSON: { virtuals: true },

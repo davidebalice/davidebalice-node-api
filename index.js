@@ -11,6 +11,7 @@ const DB = process.env.DATABASE;
 const cors = require('cors');
 
 global.token = '';
+
 /*
 app.use(
   cors({
