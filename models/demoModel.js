@@ -1,61 +1,5 @@
 const mongoose = require('mongoose');
 
-/*
-
-[
-  {
-    "id": 1,
-    "title": "Css generator",
-    "title2": "React Css generator",
-    "long_desc": "Questa è una demo ",
-    "tecnology": "React",
-    "slug": "react-css-generator",
-    "bg": "cssgenerator",
-    "order": 2,
-    "frontend": "https://css-generator.davidebalice.dev/",
-    "github": "https://github.com/davidebalice/react-css-generator"
-  },
-  {
-    "id": 2,
-    "title": "Creative agency",
-    "title2": "Creative agency Laravel Demo",
-    "long_desc": "Questa è una demo ",
-    "tecnology": "Laravel",
-    "slug": "laravel-creative-agency-web-site-demo",
-    "bg": "creative",
-    "order": 6,
-    "frontend": "https://creative-agency.davidebalice.dev/",
-    "backend": "https://creative-agency.davidebalice.dev/login",
-    "github": "https://github.com/davidebalice/laravel-creative-agency"
-  },
-  {
-    "id": 3,
-    "title": "Realestate Laravel",
-    "title2": "Demo 3",
-    "long_desc": "Questa è una demo ",
-    "tecnology": "Laravel",
-    "slug": "laravel-realestate-web-site",
-    "bg": "realestate",
-    "order": 3,
-    "frontend": "aaa",
-    "backend": "bbb",
-    "github": "ccc",
-    "gallery_frontend": [
-      "https://www.aroundweb.it/davidebalice.dev/gallery/realestate1.jpg",
-      "https://www.aroundweb.it/davidebalice.dev/gallery/realestate2.jpg",
-      "https://www.aroundweb.it/davidebalice.dev/gallery/realestate3.jpg"
-    ],
-    "gallery_backend": [
-      "https://www.aroundweb.it/davidebalice.dev/gallery/realestate1_backend.jpg",
-      "https://www.aroundweb.it/davidebalice.dev/gallery/realestate2_backend.jpg",
-      "https://www.aroundweb.it/davidebalice.dev/gallery/realestate3_backend.jpg"
-    ]
-  },
-  {
-
-
-*/
-
 const demoSchema = new mongoose.Schema(
   {
     title: {
@@ -103,6 +47,10 @@ const demoSchema = new mongoose.Schema(
       trim: true,
     },
     github: {
+      type: String,
+      trim: true,
+    },
+    githubBackend: {
       type: String,
       trim: true,
     },
