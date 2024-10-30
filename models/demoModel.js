@@ -22,6 +22,10 @@ const demoSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Demo must have a description'],
     },
+    description_it: {
+      type: String,
+      trim: true,
+    },
     tecnology: {
       type: String,
       trim: true,
@@ -51,6 +55,10 @@ const demoSchema = new mongoose.Schema(
       trim: true,
     },
     githubBackend: {
+      type: String,
+      trim: true,
+    },
+    apk: {
       type: String,
       trim: true,
     },
