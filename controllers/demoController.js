@@ -370,7 +370,7 @@ exports.updatePhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.cover = catchAsync(async (req, res, next) => {
-  const filename = req.params.filename;
+  const filename = path.basename(req.params.filename);
   const filePath = path.join(process.env.FILE_PATH, 'uploads/demo', filename);
   res.sendFile(filePath, (err) => {
     if (err) {
@@ -381,7 +381,7 @@ exports.cover = catchAsync(async (req, res, next) => {
 });
 
 exports.gallery = catchAsync(async (req, res, next) => {
-  const filename = req.params.filename;
+  const filename = path.basename(req.params.filename);
   const filePath = path.join(process.env.FILE_PATH, 'public/img/demo', filename);
   res.sendFile(filePath, (err) => {
     if (err) {
