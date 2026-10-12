@@ -39,19 +39,16 @@ const gallerySchema = new mongoose.Schema(
 gallerySchema.index({ owner: 1 });
 gallerySchema.index({ task_id: 1 });
 
-gallerySchema.pre('find', function (next) {
+gallerySchema.pre('find', function () {
   this.populate('owner', 'name surname photo email role');
-  next();
 });
 
-gallerySchema.pre('findOne', function (next) {
+gallerySchema.pre('findOne', function () {
   this.populate('owner', 'name surname photo email role');
-  next();
 });
 
-gallerySchema.pre(/^findOneAnd/, async function (next) {
+gallerySchema.pre(/^findOneAnd/, async function () {
   this.r = await this.model.findOne();
-  next();
 });
 
 const Gallery = mongoose.model('Gallery', gallerySchema);
